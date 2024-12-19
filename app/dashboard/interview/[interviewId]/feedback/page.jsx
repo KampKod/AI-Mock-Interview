@@ -11,6 +11,7 @@ import {
 import { ChevronsUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { useMemo } from "react";
 
 
 function Feedback({params}) {
@@ -30,6 +31,17 @@ function Feedback({params}) {
         setFeedbackList(result);
     }
 
+    const overallRating = useMemo(() => {
+      if (feedbackList && feedbackList.length > 0) {
+        const totalRating = feedbackList.reduce(
+          (sum, item) => sum + Number(item.rating),
+          0
+        );
+        return (totalRating / feedbackList.length).toFixed(1);
+      }
+      return 0;
+    }, [feedbackList]);
+
   return (
     <div className='p-10'>
         
@@ -37,9 +49,20 @@ function Feedback({params}) {
         <h2 className='font-bold text-xl text-gray-500'>No Interview Feedback Record Found</h2>  
           :
         <>
-       <h2 className='text-3xl font-bold text-green-500'>Congratulation!</h2>
+       <h2 className='text-3xl font-bold text-green-500'>Congratulations!</h2>
         <h2 className='font-bold text-2xl'>Here is your interview feedback</h2>
        
+        <h2 className="text-primary text-lg my-3">
+            Your overall interview rating{" "}
+            <strong
+              className={`${
+                overallRating >= 5 ? "text-green-500" : "text-red-600"
+              }`}
+            >
+              {overallRating}
+              <span className="text-black">/10</span>
+            </strong>
+          </h2>
         {/* <h2 className='text-primary text-lg my-3'>Your overall interview rating: <strong>7/10</strong></h2> */}
    
         <h2 className='text-sm text-gray-500'>Find below interview question with correct answer, Your answer and feedback for improvement</h2>
