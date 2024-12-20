@@ -2,8 +2,8 @@ import { Lightbulb, Volume2, VolumeX } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
 function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiveQuestionIndex }) {
-  const [isMuted, setIsMuted] = useState(false);  // Track mute state
-  const [speech, setSpeech] = useState(null);  // Store the current speech instance
+  const [isMuted, setIsMuted] = useState(false); // Track mute state
+  const [speech, setSpeech] = useState(null); // Store the current speech instance
 
   // Function to start speech for the question text
   const textToSpeech = (text) => {
@@ -20,17 +20,24 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
 
       const newSpeech = new SpeechSynthesisUtterance(text);
       speechSynthesis.speak(newSpeech);
-      setSpeech(newSpeech);  // Store the new speech instance
+      setSpeech(newSpeech); // Store the new speech instance
     } else {
       alert('Sorry, Your browser does not support text to speech');
     }
-  }
+  };
 
   // Automatically play the question when the active question index changes, unless muted
   useEffect(() => {
     if (mockInterviewQuestion[activeQuestionIndex]?.question && !isMuted) {
       textToSpeech(mockInterviewQuestion[activeQuestionIndex].question);
     }
+
+    // Cleanup function to stop speech synthesis when the component unmounts
+    return () => {
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+      }
+    };
   }, [activeQuestionIndex, mockInterviewQuestion, isMuted]);
 
   // Handle mute/unmute toggle
@@ -39,7 +46,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
     if (speechSynthesis.speaking) {
       speechSynthesis.cancel();
     }
-    setIsMuted((prev) => !prev);  // Toggle mute state
+    setIsMuted((prev) => !prev); // Toggle mute state
   };
 
   return (
@@ -59,7 +66,6 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
           </h2>
         ))}
       </div>
-
 
       {/* Active Question Display */}
       <h2 className="my-5 text-md md:text-lg">
@@ -94,6 +100,6 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       </div>
     </div>
   );
-};
+}
 
 export default QuestionsSection;
