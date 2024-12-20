@@ -41,7 +41,7 @@ function StartInterview({ params }) {
       console.error("Error fetching interview details:", error);
     }
   };
-
+  console.log("start page mock interview",mockInterviewQuestion)
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
