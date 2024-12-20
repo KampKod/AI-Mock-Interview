@@ -64,7 +64,7 @@ export const MacbookScroll = ({
         className="dark:text-white text-neutral-800 text-3xl font-bold mb-20 text-center">
         {title || (
           <span className="sm: text-4xl"> 
-            This Macbook is built with Tailwindcss. <br /> No kidding.
+            Ace Your Interviews with AI-Powered Mock Sessions. <br /> It's that simple.
           </span>
         )}
       </motion.h2>

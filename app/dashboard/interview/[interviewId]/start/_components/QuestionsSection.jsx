@@ -50,15 +50,16 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
           <h2
             key={index} // Unique key for each question
             className={`p-2 border rounded-full text-xs md:text-sm text-center cursor-pointer ${
-              activeQuestionIndex === index ? "bg-primary text-white" : ""
+              activeQuestionIndex === index ? "bg-primary text-white" : "bg-gray-200 cursor-not-allowed"
             }`}
-            // Click to navigate between questions
-            onClick={() => setActiveQuestionIndex(index)}
+            // If the question is not active, disable the button's interaction by adding a "disabled" style
+            onClick={() => activeQuestionIndex !== index && setActiveQuestionIndex(index)} // Disable click if inactive
           >
             Question #{index + 1}
           </h2>
         ))}
       </div>
+
 
       {/* Active Question Display */}
       <h2 className="my-5 text-md md:text-lg">

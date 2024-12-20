@@ -6,6 +6,7 @@ import FooterPage from "@/components/ui/footerpage";
 import { MacbookScroll } from "@/components/ui/mackbook-scroll";
 import { AnimatedTestimonials } from "@/components/ui/animated-testinomials";
 import { Testimonials } from "./content/testinomials";
+import { LogInIcon,PlayIcon, ClipboardListIcon } from "lucide-react";
 export default function Home() {
   return (
     <>
@@ -31,48 +32,45 @@ export default function Home() {
           <h2 className="text-md text-gray-500">Give mock interview in just 3 simple easy steps</h2>
 
           <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <a
-              className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
-              href="#"
-            >
-              <AtomIcon className="h-8 w-8" />
+          <a
+            className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+            href="#"
+          >
+            <LogInIcon className="h-8 w-8 text-black-500" /> {/* Using LoginIcon */}
+            
+            <h2 className="mt-4 text-xl font-bold text-black">Log in to Your Account</h2>
+            
+            <p className="mt-1 text-sm text-gray-600">
+              Access personalized mock interview sessions and track your progress with ease.
+            </p>
+          </a>
 
-              <h2 className="mt-4 text-xl font-bold text-black">Write prompt for your form</h2>
+          <a
+            className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+            href="#"
+          >
+            <ClipboardListIcon className="h-8 w-8 text-black-500" /> {/* Using ClipboardListIcon */}
+            
+            <h2 className="mt-4 text-xl font-bold text-black">Fill in Job Role Details</h2>
+            
+            <p className="mt-1 text-sm text-gray-600">
+              Provide job-specific information to tailor your mock interviews for accurate preparation.
+            </p>
+          </a>
 
-              <p className="mt-1 text-sm text-gray-600">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut quo possimus adipisci
-                distinctio alias voluptatum blanditiis laudantium.
-              </p>
-            </a>
-
-            <a
-              className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
-              href="#"
-            >
-              <Edit className="h-8 w-8" />
-
-              <h2 className="mt-4 text-xl font-bold text-black">Edit Your form</h2>
-
-              <p className="mt-1 text-sm text-gray-600">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut quo possimus adipisci
-                distinctio alias voluptatum blanditiis laudantium.
-              </p>
-            </a>
-
-            <a
-              className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
-              href="#"
-            >
-              <Share2 className="h-8 w-8" />
-
-              <h2 className="mt-4 text-xl font-bold text-black">Share & Start Accepting Responses</h2>
-
-              <p className="mt-1 text-sm text-gray-600">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut quo possimus adipisci
-                distinctio alias voluptatum blanditiis laudantium.
-              </p>
-            </a>
-          </div>
+          <a
+            className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+            href="#"
+          >
+            <PlayIcon className="h-8 w-8 text-black-500" /> {/* Using PlayIcon */}
+            
+            <h2 className="mt-4 text-xl font-bold text-black">Start the Interview and Receive Feedback</h2>
+            
+            <p className="mt-1 text-sm text-gray-600">
+              Experience real-world interview simulations and get actionable feedback at the end.
+            </p>
+          </a>
+        </div>
 
           <div className="mt-12 text-center">
           <a href="/dashboard" className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary hover:bg-primary focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
