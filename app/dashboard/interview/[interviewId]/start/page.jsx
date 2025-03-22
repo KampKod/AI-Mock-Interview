@@ -7,23 +7,25 @@ import QuestionsSection from "./_components/QuestionsSection";
 import RecordAnswerSection from "./_components/RecordAnswerSection";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useParams } from 'next/navigation';
 
-function StartInterview({ params }) {
+function StartInterview() {
+  const { interviewId } = useParams();
   const [interviewData, setInterviewData] = useState();
   const [mockInterviewQuestion, setMockInterviewQuestion] = useState([]); // Initialized as array
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
   useEffect(() => {
     GetInterviewDetails();
-  }, []);
+  }, [interviewId]);
 
   const GetInterviewDetails = async () => {
     try {
       const result = await db
         .select()
         .from(MockInterview)
-        .where(eq(MockInterview.mockId, params.interviewId));
-  
+        .where(eq(MockInterview.mockId, interviewId));
+
       let jsonMockResp = [];
       try {
         jsonMockResp = JSON.parse(result[0].jsonMockResp);
@@ -42,15 +44,15 @@ function StartInterview({ params }) {
       } catch (err) {
         console.error("Invalid JSON format:", err);
       }
-  
+
       setMockInterviewQuestion(jsonMockResp);
       setInterviewData(result[0]);
     } catch (error) {
       console.error("Error fetching interview details:", error);
     }
   };
-  
-  console.log("start page mock interview",mockInterviewQuestion)
+
+  console.log("start page mock interview", mockInterviewQuestion);
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

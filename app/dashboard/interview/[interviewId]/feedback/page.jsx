@@ -10,21 +10,22 @@ import {
   } from "@/components/ui/collapsible"
 import { ChevronsUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { useMemo } from "react";
 
-
-function Feedback({params}) {
-
+function Feedback() {
+    const { interviewId } = useParams();
     const [feedbackList,setFeedbackList]=useState([]);
     const router=useRouter();
+
     useEffect(()=>{
         GetFeedback();
-    },[])
+    },[interviewId])
+
     const GetFeedback=async()=>{
         const result=await db.select()
         .from(UserAnswer)
-        .where(eq(UserAnswer.mockIdRef,params.interviewId))
+        .where(eq(UserAnswer.mockIdRef,interviewId))
         .orderBy(UserAnswer.id);
 
         console.log(result);
