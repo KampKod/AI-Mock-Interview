@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiveQuestionIndex }) {
   const [isMuted, setIsMuted] = useState(false); // Track mute state
   const [speech, setSpeech] = useState(null); // Store the current speech instance
+  const [isSpeeching, setIsSpeeching] = useState(false); // Track if speech is currently in progress
 
   // Function to start speech for the question text
   const textToSpeech = (text) => {
@@ -19,6 +20,8 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       }
 
       const newSpeech = new SpeechSynthesisUtterance(text);
+      newSpeech.onstart = () => setIsSpeeching(true);
+      newSpeech.onend = () => setIsSpeeching(false);
       speechSynthesis.speak(newSpeech);
       setSpeech(newSpeech); // Store the new speech instance
     } else {
@@ -26,19 +29,12 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
     }
   };
 
-  // Automatically play the question when the active question index changes, unless muted
+  // Stop speech when the active question index changes
   useEffect(() => {
-    if (mockInterviewQuestion[activeQuestionIndex]?.question && !isMuted) {
-      textToSpeech(mockInterviewQuestion[activeQuestionIndex].question);
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
     }
-
-    // Cleanup function to stop speech synthesis when the component unmounts
-    return () => {
-      if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
-      }
-    };
-  }, [activeQuestionIndex, mockInterviewQuestion, isMuted]);
+  }, [activeQuestionIndex]);
 
   // Handle mute/unmute toggle
   const handleMuteToggle = () => {
@@ -47,6 +43,15 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       speechSynthesis.cancel();
     }
     setIsMuted((prev) => !prev); // Toggle mute state
+  };
+
+  // Handle volume icon click
+  const handleVolumeClick = () => {
+    if (!isSpeeching) {
+      textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question || "");
+    } else {
+      speechSynthesis.cancel();
+    }
   };
 
   return (
@@ -59,8 +64,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
             className={`p-2 border rounded-full text-xs md:text-sm text-center cursor-pointer ${
               activeQuestionIndex === index ? "bg-primary text-white" : "bg-gray-200 cursor-not-allowed"
             }`}
-            // If the question is not active, disable the button's interaction by adding a "disabled" style
-            onClick={() => activeQuestionIndex !== index && setActiveQuestionIndex(index)} // Disable click if inactive
+            onClick={() => setActiveQuestionIndex(index)}
           >
             Question #{index + 1}
           </h2>
@@ -73,7 +77,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
       </h2>
 
       {/* Text-to-Speech Trigger */}
-      <div className="flex items-center gap-2 cursor-pointer">
+      <div className="flex items-center gap-2 cursor-pointer" onClick={handleVolumeClick}>
         {/* Mute/Unmute Icon */}
         {isMuted ? (
           <VolumeX
@@ -82,8 +86,7 @@ function QuestionsSection({ mockInterviewQuestion, activeQuestionIndex, setActiv
           />
         ) : (
           <Volume2
-            className="text-black-300"
-            onClick={() => textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question || "")} // Speak the question when clicked
+            className={`${isSpeeching ? 'text-primary' : 'text-black-300'}`}
           />
         )}
       </div>

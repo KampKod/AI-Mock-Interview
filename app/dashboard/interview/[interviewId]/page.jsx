@@ -9,24 +9,34 @@ import Webcam from "react-webcam";
 import Link from "next/link";
 import { useContext } from 'react';
 import { WebCamContext } from "../../layout";
+import { useParams } from 'next/navigation';
 
-const Interview = ({ params }) => {
+const Interview = () => {
   const { webCamEnabled, setWebCamEnabled } = useContext(WebCamContext);
-  const [interviewData, setInterviewData] = useState();
-  // const [webCamEnabled, setWebCamEnebled] = useState(false);
+  const [interviewData, setInterviewData] = useState(null);
+  const { interviewId } = useParams();
+
   useEffect(() => {
-    console.log(params.interviewId);
-    GetInterviewDetails();
-  }, []);
-  
-  const GetInterviewDetails = async () => {
-    const result = await db
-      .select()
-      .from(MockInterview)
-      .where(eq(MockInterview.mockId, params.interviewId));
-      
-    setInterviewData(result[0]);
-  };
+    const getInterviewDetails = async () => {
+      try {
+        const result = await db
+          .select()
+          .from(MockInterview)
+          .where(eq(MockInterview.mockId, interviewId));
+
+        setInterviewData(result[0]);
+      } catch (error) {
+        console.error('Error fetching interview details:', error);
+      }
+    };
+
+    getInterviewDetails();
+  }, [interviewId]);
+
+  if (!interviewData) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="my-10">
       <h2 className="font-bold text-2xl text-center">Let's Get Started</h2>
@@ -35,15 +45,15 @@ const Interview = ({ params }) => {
           <div className="flex flex-col p-5 rounded-lg border gap-5">
             <h2 className="text-lg">
               <strong>Job Role/Job Position: </strong>
-              {interviewData?.jobPosition}
+              {interviewData.jobPosition}
             </h2>
             <h2 className="text-lg">
               <strong>Job Description/Job Stack: </strong>
-              {interviewData?.jobDesc}
+              {interviewData.jobDesc}
             </h2>
             <h2 className="text-lg">
               <strong>Years of Experience: </strong>
-              {interviewData?.jobExperience}
+              {interviewData.jobExperience}
             </h2>
           </div>
           <div className="p-5 border rounded-lg border-yellow-300 bg-yellow-100">
@@ -83,7 +93,7 @@ const Interview = ({ params }) => {
         </div>
       </div>
       <div className="flex justify-center my-4 md:my-0 md:justify-end md:items-end">
-        <Link href={"/dashboard/interview/" + params.interviewId + "/start"}>
+        <Link href={"/dashboard/interview/" + interviewData.mockId + "/start"}>
           <Button>Start Interview</Button>
         </Link>
       </div>
